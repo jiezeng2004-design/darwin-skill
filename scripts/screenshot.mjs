@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 /**
  * Darwin Skill - 高清截图脚本
  *
@@ -14,8 +14,18 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-// 使用全局安装的 playwright-core
-const pw = require('playwright-core');
+let _pw;
+try {
+  _pw = require('playwright-core');
+} catch {
+  try {
+    _pw = require('playwright');
+  } catch {
+    console.error('Missing Playwright. Please install playwright or playwright-core.');
+    process.exit(1);
+  }
+}
+const pw = _pw;
 
 const htmlPath = process.argv[2] || new URL('../templates/result-card.html', import.meta.url).pathname;
 const outputPath = process.argv[3] || new URL('../templates/result-card.png', import.meta.url).pathname;
